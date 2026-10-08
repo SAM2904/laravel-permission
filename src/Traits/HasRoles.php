@@ -20,7 +20,7 @@ trait HasRoles
     public static function bootHasRoles()
     {
         static::deleting(function ($model) {
-            if (method_exists($model, 'isForceDeleting') && !$model->isForceDeleting()) {
+            if (method_exists($model, 'isForceDeleting') && ! $model->isForceDeleting()) {
                 return;
             }
 
@@ -30,7 +30,7 @@ trait HasRoles
 
     public function getRoleClass()
     {
-        if (!isset($this->roleClass)) {
+        if (! isset($this->roleClass)) {
             $this->roleClass = app(PermissionRegistrar::class)->getRoleClass();
         }
 
@@ -50,7 +50,7 @@ trait HasRoles
             PermissionRegistrar::$pivotRole
         );
 
-        if (!PermissionRegistrar::$teams) {
+        if (! PermissionRegistrar::$teams) {
             return $relation;
         }
 
@@ -110,13 +110,13 @@ trait HasRoles
                 }
 
                 $role = $this->getStoredRole($role);
-                if (!$role instanceof Role) {
+                if (! $role instanceof Role) {
                     return $array;
                 }
 
                 $this->ensureModelSharesGuard($role);
 
-                $array[$role->getKey()] = PermissionRegistrar::$teams && !is_a($this, Permission::class) ?
+                $array[$role->getKey()] = PermissionRegistrar::$teams && ! is_a($this, Permission::class) ?
                     [PermissionRegistrar::$teamsKey => getPermissionsTeamId()] : [];
 
                 return $array;
@@ -315,18 +315,19 @@ trait HasRoles
     }
 
     /** Return only single rolename, developer don't need to use an arr index always.
-     * @param integer $index always sets to 0.
+     * @param int $index always sets to 0.
      * @return string $role_name
      * OR
      * @return void
      */
     public function getRoleName($index = 0)
     {
-        if (FALSE == is_int($index)) {
+        if (false == is_int($index)) {
             trigger_error('function getRoleName expected Argument 1 to be Integer', E_USER_WARNING);
         }
         if (array_key_exists($index, $this->roles)) {
             $role = $this->roles[$index];
+
             return isset($role->name) ? $role->name : '';
         }
     }
@@ -361,7 +362,7 @@ trait HasRoles
             return explode('|', $pipeString);
         }
 
-        if (!in_array($quoteCharacter, ["'", '"'])) {
+        if (! in_array($quoteCharacter, ["'", '"'])) {
             return explode('|', $pipeString);
         }
 
